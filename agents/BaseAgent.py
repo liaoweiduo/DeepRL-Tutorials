@@ -34,6 +34,21 @@ class BaseAgent(object):
         if os.path.isfile(fname_optim):
             self.optimizer.load_state_dict(torch.load(fname_optim))
 
+    def save_w_by_name(self, name="DQN"):
+        torch.save(self.model.state_dict(), './saved_agents/'+name+'_model.dump')
+        torch.save(self.optimizer.state_dict(), './saved_agents/'+name+'_optim.dump')
+
+    def load_w_by_name(self, name="DQN"):
+        fname_model = "./saved_agents/'+name+'_model.dump"
+        fname_optim = "./saved_agents/'+name+'_optim.dump"
+
+        if os.path.isfile(fname_model):
+            self.model.load_state_dict(torch.load(fname_model))
+            self.target_model.load_state_dict(self.model.state_dict())
+
+        if os.path.isfile(fname_optim):
+            self.optimizer.load_state_dict(torch.load(fname_optim))
+
     def save_replay(self):
         pickle.dump(self.memory, open('./saved_agents/exp_replay_agent.dump', 'wb'))
 
